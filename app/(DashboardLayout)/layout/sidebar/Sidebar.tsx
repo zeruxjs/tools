@@ -1,7 +1,7 @@
-import { useMediaQuery, Box, Drawer } from "@mui/material";
+"use client";
+import React from "react";
+import { Box, Drawer, useTheme } from "@mui/material";
 import SidebarItems from "./SidebarItems";
-
-
 
 interface ItemType {
   isMobileSidebarOpen: boolean;
@@ -14,104 +14,62 @@ const MSidebar = ({
   onSidebarClose,
   isSidebarOpen,
 }: ItemType) => {
-  const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up("lg"));
+  const theme = useTheme();
 
   const sidebarWidth = "270px";
 
-  // Custom CSS for short scrollbar
-  const scrollbarStyles = {
-    '&::-webkit-scrollbar': {
-      width: '7px',
-
-    },
-    '&::-webkit-scrollbar-thumb': {
-      backgroundColor: '#eff2f7',
-      borderRadius: '15px',
-    },
+  const drawerPaperStyles = {
+    boxSizing: "border-box",
+    width: sidebarWidth,
+    borderRight: '1px solid rgba(0,0,0,0.1)',
   };
 
-
-  if (lgUp) {
-    return (
+  return (
+    <Box component="nav" aria-label="sidebar" sx={{ display: 'flex' }}>
+      {/* Desktop Sidebar (Permanent) */}
       <Box
         sx={{
+          display: { xs: 'none', lg: 'block' },
           width: sidebarWidth,
           flexShrink: 0,
         }}
       >
-        {/* ------------------------------------------- */}
-        {/* Sidebar for desktop */}
-        {/* ------------------------------------------- */}
         <Drawer
           anchor="left"
           open={isSidebarOpen}
           variant="permanent"
           slotProps={{
             paper: {
-              sx: {
-                boxSizing: "border-box",
-                ...scrollbarStyles,
-                width: sidebarWidth,
-              },
+              sx: drawerPaperStyles,
             }
           }}
         >
-          {/* ------------------------------------------- */}
-          {/* Sidebar Box */}
-          {/* ------------------------------------------- */}
-          <Box
-            sx={{
-              height: "100%",
-            }}
-          >
-
-            <Box>
-              {/* ------------------------------------------- */}
-              {/* Sidebar Items */}
-              {/* ------------------------------------------- */}
-              <SidebarItems />
-            </Box>
+          <Box sx={{ height: "100%" }}>
+            <SidebarItems />
           </Box>
         </Drawer>
-      </Box >
-    );
-  }
-
-  return (
-    <Drawer
-      anchor="left"
-      open={isMobileSidebarOpen}
-      onClose={onSidebarClose}
-      variant="temporary"
-
-      slotProps={{
-        paper: {
-          sx: {
-            boxShadow: (theme) => theme.shadows[8],
-            ...scrollbarStyles,
-          },
-        }
-      }}
-    >
-      {/* ------------------------------------------- */}
-      {/* Sidebar Box */}
-      {/* ------------------------------------------- */}
-      <Box>
-        {/* ------------------------------------------- */}
-        {/* Sidebar Items */}
-        {/* ------------------------------------------- */}
-        <SidebarItems />
       </Box>
-      {/* ------------------------------------------- */}
-      {/* Sidebar For Mobile */}
-      {/* ------------------------------------------- */}
-    </Drawer>
+
+      {/* Mobile Sidebar (Temporary) */}
+      <Drawer
+        anchor="left"
+        open={isMobileSidebarOpen}
+        onClose={onSidebarClose}
+        variant="temporary"
+        sx={{
+          display: { xs: 'block', lg: 'none' },
+          '& .MuiDrawer-paper': {
+            boxShadow: (theme) => theme.shadows[8],
+            ...drawerPaperStyles,
+          },
+        }}
+      >
+        <Box sx={{ height: "100%" }}>
+          <SidebarItems />
+        </Box>
+      </Drawer>
+    </Box>
   );
 };
 
 export default MSidebar;
-
-
-
-
-

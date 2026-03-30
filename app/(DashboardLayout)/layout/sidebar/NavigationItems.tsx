@@ -1,0 +1,351 @@
+import {
+  IconHome,
+  IconShieldLock,
+  IconMessageChatbot,
+  IconFiles,
+  IconChartBar,
+  IconActivity,
+  IconApi,
+  IconBinary,
+  IconBraces,
+  IconFingerprint,
+  IconEdit,
+  IconBrowser,
+  IconNetwork,
+  IconLock,
+  IconCloud,
+  IconDeviceFloppy,
+  IconPoint,
+  IconFileCode,
+  IconTransform,
+  IconFileZip,
+  IconAdjustments,
+} from "@tabler/icons-react";
+
+export const Menuitems = [
+  {
+    id: "home-1",
+    title: "Home",
+    icon: IconHome,
+    href: "/",
+  },
+  {
+    id: "div-main-1",
+    divider: true,
+  },
+  {
+    navlabel: true,
+    subheader: "Developer Tools",
+  },
+  {
+    id: "api-group",
+    title: "API Tools",
+    icon: IconApi,
+    href: "/dev/api",
+    children: [
+      { id: "api-t", title: "API Tester", icon: IconPoint, href: "/dev/api/tester" },
+      { id: "api-ws", title: "WebSocket Tester", icon: IconPoint, href: "/dev/api/websocket" },
+      { id: "api-gql", title: "GraphQL Explorer", icon: IconPoint, href: "/dev/api/graphql" },
+    ],
+  },
+  {
+    id: "enc-group",
+    title: "Encoding / Decoding",
+    icon: IconBinary,
+    href: "/dev/encoding",
+    children: [
+      { id: "enc-b64", title: "Base64 Encode/Decode", icon: IconPoint, href: "/dev/encoding/base64" },
+      { id: "enc-url", title: "URL Encode/Decode", icon: IconPoint, href: "/dev/encoding/url" },
+      { id: "enc-html", title: "HTML Encode/Decode", icon: IconPoint, href: "/dev/encoding/html" },
+      { id: "enc-jwt", title: "JWT Decode / Verify", icon: IconPoint, href: "/dev/encoding/jwt" },
+    ],
+  },
+  {
+    id: "fmt-group",
+    title: "Data Formatting",
+    icon: IconBraces,
+    href: "/dev/formatting",
+    children: [
+      { id: "fmt-json", title: "JSON Formatter / Validator", icon: IconPoint, href: "/dev/formatting/json" },
+      { id: "fmt-xml", title: "XML Formatter", icon: IconPoint, href: "/dev/formatting/xml" },
+      { id: "fmt-yaml", title: "YAML ↔ JSON Converter", icon: IconPoint, href: "/dev/formatting/yaml-json" },
+      { id: "fmt-csv", title: "CSV ↔ JSON Converter", icon: IconPoint, href: "/dev/formatting/csv-json" },
+      { id: "fmt-sql", title: "SQL Formatter", icon: IconPoint, href: "/dev/formatting/sql" },
+    ],
+  },
+  {
+    id: "gen-group",
+    title: "Generators",
+    icon: IconFingerprint,
+    href: "/dev/generators",
+    children: [
+      { id: "gen-uuid", title: "UUID Generator", icon: IconPoint, href: "/dev/generators/uuid" },
+      { id: "gen-hash", title: "Hash Generator", icon: IconPoint, href: "/dev/generators/hash" },
+      { id: "gen-hmac", title: "HMAC Generator", icon: IconPoint, href: "/dev/generators/hmac" },
+      { id: "gen-rand", title: "Random Data Generator", icon: IconPoint, href: "/dev/generators/random" },
+    ],
+  },
+  {
+    id: "txt-group",
+    title: "Text Tools",
+    icon: IconEdit,
+    href: "/dev/text",
+    children: [
+      { id: "txt-diff", title: "Diff Checker", icon: IconPoint, href: "/dev/text/diff" },
+      { id: "txt-regex", title: "Regex Tester", icon: IconPoint, href: "/dev/text/regex" },
+      { id: "txt-case", title: "Text Case Converter", icon: IconPoint, href: "/dev/text/case" },
+      { id: "txt-lorem", title: "Lorem Ipsum Generator", icon: IconPoint, href: "/dev/text/lorem" },
+      { id: "txt-stats", title: "Text Stats", icon: IconPoint, href: "/dev/text/stats" },
+    ],
+  },
+  {
+    id: "div-main-2",
+    divider: true,
+  },
+  {
+    navlabel: true,
+    subheader: "Web Tools",
+  },
+  {
+    id: "web-site",
+    title: "Website Tools",
+    icon: IconBrowser,
+    href: "/web/site",
+    children: [
+      { id: "web-ss", title: "Website Screenshot", icon: IconPoint, href: "/web/site/screenshot" },
+      { id: "web-meta", title: "Meta Tag Preview", icon: IconPoint, href: "/web/site/meta" },
+      { id: "web-robots", title: "Robots.txt Tester", icon: IconPoint, href: "/web/site/robots" },
+      { id: "web-sitemap", title: "Sitemap Generator", icon: IconPoint, href: "/web/site/sitemap" },
+    ],
+  },
+  {
+    id: "web-net",
+    title: "Network Tools",
+    icon: IconNetwork,
+    href: "/web/network",
+    children: [
+      { id: "web-dns", title: "DNS Lookup", icon: IconPoint, href: "/web/network/dns" },
+      { id: "web-ip", title: "IP Lookup", icon: IconPoint, href: "/web/network/ip" },
+      { id: "web-ports", title: "Port Scanner", icon: IconPoint, href: "/web/network/ports" },
+      { id: "web-ping", title: "Ping Tool", icon: IconPoint, href: "/web/network/ping" },
+      { id: "web-status", title: "URL Status Checker", icon: IconPoint, href: "/web/network/status" },
+    ],
+  },
+  {
+    id: "web-browser",
+    title: "Browser Tools",
+    icon: IconBrowser,
+    href: "/web/browser",
+    children: [
+      { id: "web-hdr", title: "HTTP Headers Viewer", icon: IconPoint, href: "/web/browser/headers" },
+      { id: "web-ua", title: "User-Agent Parser", icon: IconPoint, href: "/web/browser/useragent" },
+      { id: "web-cookie", title: "Cookie Viewer", icon: IconPoint, href: "/web/browser/cookies" },
+    ],
+  },
+  {
+    id: "div-main-3",
+    divider: true,
+  },
+  {
+    navlabel: true,
+    subheader: "Security Tools",
+  },
+  {
+    id: "sec-auth",
+    title: "Authentication & Tokens",
+    icon: IconShieldLock,
+    href: "/security/auth",
+    children: [
+      { id: "sec-pgen", title: "Password Generator", icon: IconPoint, href: "/security/auth/password-gen" },
+      { id: "sec-pstr", title: "Password Strength Checker", icon: IconPoint, href: "/security/auth/password-strength" },
+      { id: "sec-jwt", title: "JWT Encoder/Decoder", icon: IconPoint, href: "/security/auth/jwt" },
+      { id: "sec-hmac", title: "HMAC Generator", icon: IconPoint, href: "/security/auth/hmac" },
+    ],
+  },
+  {
+    id: "sec-web",
+    title: "Web Security",
+    icon: IconLock,
+    href: "/security/web",
+    children: [
+      { id: "sec-ssl", title: "SSL Certificate Checker", icon: IconPoint, href: "/security/web/ssl" },
+      { id: "sec-cors", title: "CORS Tester", icon: IconPoint, href: "/security/web/cors" },
+      { id: "sec-csp", title: "CSP Analyzer", icon: IconPoint, href: "/security/web/csp" },
+    ],
+  },
+  {
+    id: "div-main-4",
+    divider: true,
+  },
+  {
+    navlabel: true,
+    subheader: "Advanced Tools",
+  },
+  {
+    id: "adv-devops",
+    title: "Networking / DevOps",
+    icon: IconCloud,
+    href: "/advanced/devops",
+    children: [
+      { id: "adv-rpx", title: "Reverse Proxy Tester", icon: IconPoint, href: "/advanced/devops/reverse-proxy" },
+      { id: "adv-tun", title: "Tunnel Manager", icon: IconPoint, href: "/advanced/devops/tunnel" },
+      { id: "adv-port", title: "Port Forwarding UI", icon: IconPoint, href: "/advanced/devops/port-forward" },
+    ],
+  },
+  {
+    id: "adv-browser",
+    title: "Browser Internals",
+    icon: IconDeviceFloppy,
+    href: "/advanced/browser",
+    children: [
+      { id: "adv-ls", title: "LocalStorage Viewer", icon: IconPoint, href: "/advanced/browser/local-storage" },
+      { id: "adv-ss", title: "SessionStorage Viewer", icon: IconPoint, href: "/advanced/browser/session-storage" },
+      { id: "adv-sw", title: "Service Worker Manager", icon: IconPoint, href: "/advanced/browser/service-worker" },
+      { id: "adv-cache", title: "Cache Storage Viewer", icon: IconPoint, href: "/advanced/browser/cache" },
+    ],
+  },
+  {
+    id: "div-main-5",
+    divider: true,
+  },
+  {
+    navlabel: true,
+    subheader: "Real-Time Tools",
+  },
+  {
+    id: "rt-comm",
+    title: "Communication",
+    icon: IconMessageChatbot,
+    href: "/realtime/comm",
+    children: [
+      { id: "rt-chat", title: "Temp Chat", icon: IconPoint, href: "/realtime/comm/chat" },
+      { id: "rt-clp", title: "Clipboard Sync", icon: IconPoint, href: "/realtime/comm/clipboard" },
+    ],
+  },
+  {
+    id: "rt-files",
+    title: "File Sharing",
+    icon: IconFiles,
+    href: "/realtime/files",
+    children: [
+      { id: "rt-p2p", title: "P2P File Sharing", icon: IconPoint, href: "/realtime/files/p2p" },
+      { id: "rt-dd", title: "Drag & Drop Share", icon: IconPoint, href: "/realtime/files/dragdrop" },
+    ],
+  },
+  {
+    id: "div-main-6",
+    divider: true,
+  },
+  {
+    navlabel: true,
+    subheader: "Productivity Tools",
+  },
+  {
+    id: "prod-text",
+    title: "Text Utilities",
+    icon: IconEdit,
+    href: "/productivity/text",
+    children: [
+      { id: "prod-case", title: "Case Converter", icon: IconPoint, href: "/productivity/text/case" },
+      { id: "prod-dup", title: "Remove Duplicate Lines", icon: IconPoint, href: "/productivity/text/duplicates" },
+      { id: "prod-sort", title: "Sort Lines", icon: IconPoint, href: "/productivity/text/sort" },
+      { id: "prod-clean", title: "Text Cleaner", icon: IconPoint, href: "/productivity/text/cleaner" },
+    ],
+  },
+  {
+    id: "prod-gen",
+    title: "Generators",
+    icon: IconFingerprint,
+    href: "/productivity/gen",
+    children: [
+      { id: "prod-num", title: "Random Number Generator", icon: IconPoint, href: "/productivity/gen/number" },
+      { id: "prod-str", title: "Random String Generator", icon: IconPoint, href: "/productivity/gen/string" },
+      { id: "prod-pass", title: "Password Generator (simple)", icon: IconPoint, href: "/productivity/gen/password" },
+    ],
+  },
+  {
+    id: "div-main-7",
+    divider: true,
+  },
+  {
+    navlabel: true,
+    subheader: "AI Tools",
+  },
+  {
+    id: "ai-code",
+    title: "Code Tools",
+    icon: IconFileCode,
+    href: "/ai/code",
+    children: [
+      { id: "ai-exp", title: "Code Explainer", icon: IconPoint, href: "/ai/code/explain" },
+      { id: "ai-fmt", title: "Code Formatter", icon: IconPoint, href: "/ai/code/format" },
+      { id: "ai-js-ts", title: "JSON \u2192 TS Interface", icon: IconPoint, href: "/ai/code/json-ts" },
+    ],
+  },
+  {
+    id: "ai-gen",
+    title: "Smart Generators",
+    icon: IconTransform,
+    href: "/ai/gen",
+    children: [
+      { id: "ai-reg", title: "Regex Generator (AI)", icon: IconPoint, href: "/ai/gen/regex" },
+      { id: "ai-sql", title: "SQL Query Generator (AI)", icon: IconPoint, href: "/ai/gen/sql" },
+    ],
+  },
+  {
+    id: "div-main-8",
+    divider: true,
+  },
+  {
+    navlabel: true,
+    subheader: "Monitoring",
+  },
+  {
+    id: "mon-srv",
+    title: "Server Status",
+    icon: IconActivity,
+    href: "/monitoring/server",
+  },
+  {
+    id: "mon-upt",
+    title: "Uptime Monitor",
+    icon: IconChartBar,
+    href: "/monitoring/uptime",
+  },
+  {
+    id: "div-main-9",
+    divider: true,
+  },
+  {
+    navlabel: true,
+    subheader: "File Tools",
+  },
+  {
+    id: "file-conv",
+    title: "File Converter",
+    icon: IconTransform,
+    href: "/files/convert",
+  },
+  {
+    id: "file-img",
+    title: "Image Compressor",
+    icon: IconFileZip,
+    href: "/files/compress",
+  },
+  {
+    id: "div-settings",
+    divider: true,
+  },
+  {
+    navlabel: true,
+    subheader: "Settings",
+  },
+  {
+    id: "settings-theme",
+    title: "Theme Preferences",
+    icon: IconAdjustments,
+    href: "/settings/theme",
+  },
+];
+
+export default Menuitems;

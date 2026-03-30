@@ -1,34 +1,56 @@
-import React from 'react';
-import { Box, AppBar, Toolbar, styled, Stack, IconButton, Badge, Button } from '@mui/material';
+import { Box, AppBar, Toolbar, styled, IconButton, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
-import Link from 'next/link';
 // components
-import Profile from './Profile';
-import { IconBellRinging, IconMenu } from '@tabler/icons-react';
+import { IconMenu } from '@tabler/icons-react';
+import { usePathname } from 'next/navigation';
+import { Menuitems } from '../sidebar/NavigationItems';
 
 interface ItemType {
   toggleMobileSidebar:  (event: React.MouseEvent<HTMLElement>) => void;
 }
 
+const AppBarStyled = styled(AppBar)(({ theme }) => ({
+  boxShadow: 'none',
+  background: theme.palette.background.paper,
+  justifyContent: 'center',
+  backdropFilter: 'blur(4px)',
+  [theme.breakpoints.up('lg')]: {
+    minHeight: '70px',
+  },
+}));
+
+const ToolbarStyled = styled(Toolbar)(({ theme }) => ({
+  width: '100%',
+  color: theme.palette.text.secondary,
+}));
+
+import { useThemeSettings } from '@/utils/theme/ThemeContext';
+import { IconSun, IconMoon, IconDeviceDesktop } from '@tabler/icons-react';
+
 const Header = ({toggleMobileSidebar}: ItemType) => {
+  const { settings, toggleThemeMode } = useThemeSettings();
+  const pathname = usePathname();
 
-  // const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
-  // const lgDown = useMediaQuery((theme) => theme.breakpoints.down('lg'));
+  const findCurrentTitle = (items: any[]): string => {
+    for (const item of items) {
+      if (item.href === pathname) return item.title;
+      if (item.children) {
+        const childTitle = findCurrentTitle(item.children);
+        if (childTitle) return childTitle;
+      }
+    }
+    return '';
+  };
 
+  const currentTitle = findCurrentTitle(Menuitems) || 'Dashboard';
 
-  const AppBarStyled = styled(AppBar)(({ theme }) => ({
-    boxShadow: 'none',
-    background: theme.palette.background.paper,
-    justifyContent: 'center',
-    backdropFilter: 'blur(4px)',
-    [theme.breakpoints.up('lg')]: {
-      minHeight: '70px',
-    },
-  }));
-  const ToolbarStyled = styled(Toolbar)(({ theme }) => ({
-    width: '100%',
-    color: theme.palette.text.secondary,
-  }));
+  const getThemeIcon = () => {
+    switch (settings.themeMode) {
+      case 'light': return <IconSun width="20" height="20" />;
+      case 'dark': return <IconMoon width="20" height="20" />;
+      default: return <IconDeviceDesktop width="20" height="20" />;
+    }
+  };
 
   return (
     <AppBarStyled position="sticky" color="default">
@@ -47,26 +69,27 @@ const Header = ({toggleMobileSidebar}: ItemType) => {
           <IconMenu width="20" height="20" />
         </IconButton>
 
-
-        <IconButton
-          size="large"
-          aria-label="show 11 new notifications"
-          color="inherit"
-          aria-controls="msgs-menu"
-          aria-haspopup="true"
+        <Typography 
+          variant="h5" 
+          sx={{ 
+            ml: { xs: 1, lg: 0 }, 
+            fontWeight: '600', 
+            color: 'text.primary',
+            fontSize: { xs: '1.1rem', lg: '1.25rem' }
+          }}
         >
-          <Badge variant="dot" color="primary">
-            <IconBellRinging size="21" stroke="1.5" />
-          </Badge>
+          {currentTitle}
+        </Typography>
 
-        </IconButton>
         <Box flexGrow={1} />
-        <Stack spacing={1} direction="row" alignItems="center">
-          <Button variant="contained" component={Link} href="/authentication/login"   disableElevation color="primary" >
-            Login
-          </Button>
-          <Profile />
-        </Stack>
+        
+        <IconButton 
+          color="inherit" 
+          onClick={toggleThemeMode}
+          title={`Theme Mode: ${settings.themeMode}`}
+        >
+          {getThemeIcon()}
+        </IconButton>
       </ToolbarStyled>
     </AppBarStyled>
   );

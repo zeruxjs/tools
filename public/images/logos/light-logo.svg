@@ -1,0 +1,14 @@
+<svg width="220" height="40" viewBox="0 0 220 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Brand Icon (Vibrant Indigo-Cyan Gradient Style - Adjusted for Dark Mode) -->
+  <path d="M12 38C20.8366 38 28 30.8366 28 22C28 13.1634 20.8366 6 12 6H2V38H12Z" fill="#818CF8"/>
+  <g style="mix-blend-mode:screen">
+    <path d="M22 38C30.8366 38 38 30.8366 38 22C38 13.1634 30.8366 6 22 6H12V38H22Z" fill="#22D3EE" fill-opacity="0.8"/>
+  </g>
+  
+  <!-- Brand Name (Light for Dark Mode) -->
+  <text x="50" y="29" fill="#F9FAFB" style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 24px; letter-spacing: -0.5px;">Zerux</text>
+  <text x="122" y="29" fill="#D1D5DB" style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 500; font-size: 24px; letter-spacing: -0.5px;">Tools</text>
+  
+  <!-- Subtle accent dot -->
+  <circle cx="43" cy="24" r="2.5" fill="#818CF8"/>
+</svg>
