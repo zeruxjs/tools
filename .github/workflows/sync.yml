@@ -1,0 +1,123 @@
+name: Sync to GitLab
+
+on:
+  push:
+    branches:
+      - "**"
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set variables
+        run: |
+          echo "REPO_NAME=${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
+          echo "ORG_NAME=${GITHUB_REPOSITORY%/*}" >> $GITHUB_ENV
+
+      ########################################
+      # Resolve GitLab namespace dynamically
+      ########################################
+
+      - name: Get GitLab namespace ID
+        run: |
+          set -e
+
+          API="https://gitlab.com/api/v4"
+
+          echo "Finding namespace for: $ORG_NAME"
+
+          RESPONSE=$(curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" "$API/namespaces")
+
+          NAMESPACE_ID=$(echo "$RESPONSE" | jq -r \
+            --arg ORG "$ORG_NAME" \
+            '.[] | select(.path==$ORG or .full_path==$ORG) | .id' | head -n1)
+
+          if [ -z "$NAMESPACE_ID" ] || [ "$NAMESPACE_ID" = "null" ]; then
+            echo "❌ Namespace not found in GitLab"
+            exit 1
+          fi
+
+          echo "✅ Namespace ID: $NAMESPACE_ID"
+
+          echo "GITLAB_NAMESPACE_ID=$NAMESPACE_ID" >> $GITHUB_ENV
+
+      ########################################
+      # GitLab.com sync (STRICT)
+      ########################################
+
+      - name: Ensure GitLab.com repo exists
+        run: |
+          set -e
+
+          API="https://gitlab.com/api/v4"
+          PROJECT_PATH="$ORG_NAME/$REPO_NAME"
+
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+            "$API/projects/$(echo $PROJECT_PATH | sed 's/\//%2F/g')")
+
+          if [ "$STATUS" != "200" ]; then
+            echo "Creating repo..."
+
+            curl --request POST "$API/projects" \
+              --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+              --data "name=$REPO_NAME" \
+              --data "namespace_id=$GITLAB_NAMESPACE_ID"
+          else
+            echo "Repo already exists"
+          fi
+
+      - name: Push to GitLab.com
+        run: |
+          set -e
+
+          git remote add gitlab "https://oauth2:${GITLAB_TOKEN}@gitlab.com/${ORG_NAME}/${REPO_NAME}.git" || true
+          git push gitlab --all
+          git push gitlab --tags
+
+      ########################################
+      # Self-hosted GitLab (OPTIONAL)
+      ########################################
+
+      - name: Get Self GitLab namespace ID
+        continue-on-error: true
+        run: |
+          API="https://gitlab.shubkb.me/api/v4"
+
+          RESPONSE=$(curl -k -s --header "PRIVATE-TOKEN: $SELF_GITLAB_TOKEN" "$API/namespaces")
+
+          NAMESPACE_ID=$(echo "$RESPONSE" | jq -r \
+            --arg ORG "$ORG_NAME" \
+            '.[] | select(.path==$ORG or .full_path==$ORG) | .id' | head -n1)
+
+          echo "SELF_GITLAB_NAMESPACE_ID=$NAMESPACE_ID" >> $GITHUB_ENV
+
+      - name: Ensure Self GitLab repo exists
+        continue-on-error: true
+        run: |
+          API="https://gitlab.shubkb.me/api/v4"
+          PROJECT_PATH="$ORG_NAME/$REPO_NAME"
+
+          STATUS=$(curl -k -s -o /dev/null -w "%{http_code}" \
+            --header "PRIVATE-TOKEN: $SELF_GITLAB_TOKEN" \
+            "$API/projects/$(echo $PROJECT_PATH | sed 's/\//%2F/g')")
+
+          if [ "$STATUS" != "200" ]; then
+            curl -k --request POST "$API/projects" \
+              --header "PRIVATE-TOKEN: $SELF_GITLAB_TOKEN" \
+              --data "name=$REPO_NAME" \
+              --data "namespace_id=$SELF_GITLAB_NAMESPACE_ID"
+          fi
+
+      - name: Push to Self GitLab
+        continue-on-error: true
+        run: |
+          git remote add selfgitlab "https://oauth2:${SELF_GITLAB_TOKEN}@gitlab.shubkb.me/${ORG_NAME}/${REPO_NAME}.git" || true
+          git push selfgitlab --all || true
+          git push selfgitlab --tags || true
