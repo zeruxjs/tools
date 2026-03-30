@@ -18,6 +18,15 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Debug secret
+        run: |
+          if [ -z "$GITLAB_TOKEN_SYNC" ]; then
+            echo "❌ STILL EMPTY"
+            exit 1
+          else
+            echo "✅ SECRET WORKS"
+          fi
+
       ########################################
       # Set variables
       ########################################
