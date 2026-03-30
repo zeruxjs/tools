@@ -32,7 +32,7 @@ jobs:
 
           echo "Finding namespace for: $ORG_NAME"
 
-          RESPONSE=$(curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" "$API/namespaces")
+          RESPONSE=$(curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN_SYNC" "$API/namespaces")
 
           NAMESPACE_ID=$(echo "$RESPONSE" | jq -r \
             --arg ORG "$ORG_NAME" \
@@ -59,14 +59,14 @@ jobs:
           PROJECT_PATH="$ORG_NAME/$REPO_NAME"
 
           STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-            --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+            --header "PRIVATE-TOKEN: $GITLAB_TOKEN_SYNC" \
             "$API/projects/$(echo $PROJECT_PATH | sed 's/\//%2F/g')")
 
           if [ "$STATUS" != "200" ]; then
             echo "Creating repo..."
 
             curl --request POST "$API/projects" \
-              --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+              --header "PRIVATE-TOKEN: $GITLAB_TOKEN_SYNC" \
               --data "name=$REPO_NAME" \
               --data "namespace_id=$GITLAB_NAMESPACE_ID"
           else
@@ -77,7 +77,7 @@ jobs:
         run: |
           set -e
 
-          git remote add gitlab "https://oauth2:${GITLAB_TOKEN}@gitlab.com/${ORG_NAME}/${REPO_NAME}.git" || true
+          git remote add gitlab "https://oauth2:${GITLAB_TOKEN_SYNC}@gitlab.com/${ORG_NAME}/${REPO_NAME}.git" || true
           git push gitlab --all
           git push gitlab --tags
 
@@ -90,7 +90,7 @@ jobs:
         run: |
           API="https://gitlab.shubkb.me/api/v4"
 
-          RESPONSE=$(curl -k -s --header "PRIVATE-TOKEN: $SELF_GITLAB_TOKEN" "$API/namespaces")
+          RESPONSE=$(curl -k -s --header "PRIVATE-TOKEN: $SELF_GITLAB_TOKEN_SYNC" "$API/namespaces")
 
           NAMESPACE_ID=$(echo "$RESPONSE" | jq -r \
             --arg ORG "$ORG_NAME" \
@@ -105,12 +105,12 @@ jobs:
           PROJECT_PATH="$ORG_NAME/$REPO_NAME"
 
           STATUS=$(curl -k -s -o /dev/null -w "%{http_code}" \
-            --header "PRIVATE-TOKEN: $SELF_GITLAB_TOKEN" \
+            --header "PRIVATE-TOKEN: $SELF_GITLAB_TOKEN_SYNC" \
             "$API/projects/$(echo $PROJECT_PATH | sed 's/\//%2F/g')")
 
           if [ "$STATUS" != "200" ]; then
             curl -k --request POST "$API/projects" \
-              --header "PRIVATE-TOKEN: $SELF_GITLAB_TOKEN" \
+              --header "PRIVATE-TOKEN: $SELF_GITLAB_TOKEN_SYNC" \
               --data "name=$REPO_NAME" \
               --data "namespace_id=$SELF_GITLAB_NAMESPACE_ID"
           fi
@@ -118,6 +118,6 @@ jobs:
       - name: Push to Self GitLab
         continue-on-error: true
         run: |
-          git remote add selfgitlab "https://oauth2:${SELF_GITLAB_TOKEN}@gitlab.shubkb.me/${ORG_NAME}/${REPO_NAME}.git" || true
+          git remote add selfgitlab "https://oauth2:${SELF_GITLAB_TOKEN_SYNC}@gitlab.shubkb.me/${ORG_NAME}/${REPO_NAME}.git" || true
           git push selfgitlab --all || true
           git push selfgitlab --tags || true
