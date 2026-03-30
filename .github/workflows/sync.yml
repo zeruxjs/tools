@@ -9,6 +9,11 @@ jobs:
   sync:
     runs-on: ubuntu-latest
 
+    # ✅ FIX: expose secrets to shell
+    env:
+      GITLAB_TOKEN_SYNC: ${{ secrets.GITLAB_TOKEN_SYNC }}
+      SELF_GITLAB_TOKEN_SYNC: ${{ secrets.SELF_GITLAB_TOKEN_SYNC }}
+
     steps:
       ########################################
       # Checkout
@@ -17,15 +22,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Debug secret
-        run: |
-          if [ -z "$GITLAB_TOKEN_SYNC" ]; then
-            echo "❌ STILL EMPTY"
-            exit 1
-          else
-            echo "✅ SECRET WORKS"
-          fi
 
       ########################################
       # Set variables
@@ -48,7 +44,7 @@ jobs:
           fi
 
       ########################################
-      # Resolve GitLab namespace dynamically
+      # Get GitLab namespace ID (robust)
       ########################################
       - name: Get GitLab namespace ID
         run: |
