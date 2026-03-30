@@ -9,7 +9,7 @@ jobs:
   sync:
     runs-on: ubuntu-latest
 
-    # ✅ FIX: expose secrets to shell
+    # ✅ expose secrets to shell
     env:
       GITLAB_TOKEN_SYNC: ${{ secrets.GITLAB_TOKEN_SYNC }}
       SELF_GITLAB_TOKEN_SYNC: ${{ secrets.SELF_GITLAB_TOKEN_SYNC }}
@@ -44,7 +44,7 @@ jobs:
           fi
 
       ########################################
-      # Get GitLab namespace ID (robust)
+      # Get GitLab namespace ID
       ########################################
       - name: Get GitLab namespace ID
         run: |
@@ -56,14 +56,10 @@ jobs:
 
           RESPONSE=$(curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN_SYNC" "$API/namespaces")
 
-          echo "Response preview:"
-          echo "$RESPONSE" | head -c 300
-
           TYPE=$(echo "$RESPONSE" | jq -r 'type')
 
           if [ "$TYPE" != "array" ]; then
             echo "❌ Unexpected response type: $TYPE"
-            echo "Likely token/auth issue"
             exit 1
           fi
 
@@ -76,7 +72,6 @@ jobs:
             exit 1
           fi
 
-          echo "✅ Namespace ID: $NAMESPACE_ID"
           echo "GITLAB_NAMESPACE_ID=$NAMESPACE_ID" >> $GITHUB_ENV
 
       ########################################
@@ -100,7 +95,8 @@ jobs:
             curl --request POST "$API/projects" \
               --header "PRIVATE-TOKEN: $GITLAB_TOKEN_SYNC" \
               --data "name=$REPO_NAME" \
-              --data "namespace_id=$GITLAB_NAMESPACE_ID"
+              --data "namespace_id=$GITLAB_NAMESPACE_ID" \
+              --data "visibility=public"
           else
             echo "Repo already exists"
           fi
@@ -132,7 +128,7 @@ jobs:
           TYPE=$(echo "$RESPONSE" | jq -r 'type' 2>/dev/null || echo "invalid")
 
           if [ "$TYPE" != "array" ]; then
-            echo "Skipping self-hosted namespace (offline or invalid)"
+            echo "Skipping self-hosted namespace"
             exit 0
           fi
 
@@ -157,7 +153,8 @@ jobs:
             curl -k --request POST "$API/projects" \
               --header "PRIVATE-TOKEN: $SELF_GITLAB_TOKEN_SYNC" \
               --data "name=$REPO_NAME" \
-              --data "namespace_id=$SELF_GITLAB_NAMESPACE_ID"
+              --data "namespace_id=$SELF_GITLAB_NAMESPACE_ID" \
+              --data "visibility=public"
           fi
 
       - name: Push to Self GitLab
